@@ -164,6 +164,7 @@ setdelay:
 
 delay:
 	dbf	d1, delay	; empty loop - delay sample playback
+	nop
 
 playloop:
 	move.b	(a0)+, (a2)	; play a sample
