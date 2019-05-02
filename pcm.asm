@@ -38,7 +38,7 @@ mdcart:	dc.b	"SEGA MEGA DRIVE "
 
 ; 68k exception handler
 cpufault:
-	movea.l	#$0, sp	; reset stack pointer
+	movea.l	$0.l, a7	; reset stack pointer
 
 startup_68k:
 	move.w	#$2700, sr	; disable ints
