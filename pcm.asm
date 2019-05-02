@@ -159,13 +159,11 @@ setfm:
 	move.b	#$2A, (a1)	; select dac register
 
 setdelay:
-	; note: timing is dependent on the instructions you have in this subroutine,
-	; so repeating nops create delays to get the correct pitch. change as required.
-	moveq	#31, d1
+	; note: sample timing is dependent on the value you've set in this subroutine
+	moveq	#43, d1
 
 delay:
-	nop
-	dbf	d1, delay
+	dbf	d1, delay	; empty loop - delay sample playback
 
 playloop:
 	move.b	(a0)+, (a2)	; play a sample
