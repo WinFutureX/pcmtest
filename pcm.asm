@@ -18,21 +18,25 @@ vectors:
 	dc.l	cpufault
 	endr
 
-; mega drive cartridge header (some unimportant parts cut)
-	org	$100
-cart0:	dc.b	"SEGA MEGA DRIVE "
-
-	org	$110
-cart1:	dc.b	"(C)KELSEY B 2019"
-
-	org	$150
-cart2:	dc.b	"YM2612 PCM AUDIO TESTING ROM FOR SEGA MEGA DRIVE"
-
-	org	$1F0
-cart3:	dc.b	"JUE"
+; mega drive cartridge header
+mdcart:	dc.b	"SEGA MEGA DRIVE "
+	dc.b	"(C)KELSEY B 2019"
+	dc.b	"YM2612 PCM AUDIO TESTING ROM FOR SEGA MEGA DRIVE"
+	dc.b	"YM2612 PCM AUDIO TESTING ROM FOR SEGA MEGA DRIVE"
+	dc.b	"TESTPCMROM-000"
+	dc.w	$0
+	dc.b	"J               "
+	dc.l	vectors
+	dc.l	romend-1
+	dc.l	$FF0000
+	dc.l	$FFFFFF
+	dc.l	$20202020
+	dc.l	$20202020
+	dc.l	$20202020
+	dc.b	"                                                    "
+	dc.b	"JUE             "
 
 ; 68k exception handler
-	org	$200
 cpufault:
 	movea.l	#$0, sp	; reset stack pointer
 
@@ -155,12 +159,18 @@ setfm:
 	move.b	#$80, (a2)	; set dac enable
 	move.b	#$2A, (a1)	; select dac register
 
+setdelay:
+	; note: timing is dependent on the instructions you have in this subroutine,
+	; so repeating nops create delays to get the correct pitch. change as required.
+	moveq	#31, d1
+
+delay:
+	nop
+	dbf	d1, delay
+
 playloop:
-	rept 112	; note: timing is dependent on the instructions you have in this subroutine,
-	nop		; so repeating nops create delays to get the correct pitch. change as required.
-	endr
 	move.b	(a0)+, (a2)	; play a sample
-	dbf	d0, playloop	; repeat for unplayed samples
+	dbf	d0, setdelay	; repeat for unplayed samples
 	move.w	#0, $A11100
 	move.w	#0, $A11200
 	bra.s	*	; if finished, hang
@@ -171,3 +181,5 @@ nullirq:
 snd	incbin	"sega.pcm"	; sega sound from sonic 1
 
 sndsize	equ	27000	; size in bytes (decimal, not hex)
+
+romend	end	; end of rom
