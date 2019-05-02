@@ -2,7 +2,6 @@
 ; for sega mega drive
 ; copyfuck 2019-42069 kelsey boey
 
-	org	$0
 vectors:
 	dc.l	$0
 	dc.l	startup_68k
