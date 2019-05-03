@@ -18,7 +18,8 @@ vectors:
 	endr
 
 ; mega drive cartridge header
-mdcart:	dc.b	"SEGA MEGA DRIVE "
+mdcart:
+	dc.b	"SEGA MEGA DRIVE "
 	dc.b	"(C)KELSEY B 2019"
 	dc.b	"YM2612 PCM AUDIO TESTING ROM FOR SEGA MEGA DRIVE"
 	dc.b	"YM2612 PCM AUDIO TESTING ROM FOR SEGA MEGA DRIVE"
@@ -55,7 +56,7 @@ z80wait:
 	bne.s	z80wait
 	lea	z80code, a1
 	lea	$A00000, a2
-	move.w	#z80end-z80code-1,d1
+	move.w	#z80end-z80code-1, d1
 
 z80loop:
 	move.b	(a1)+, (a2)+
