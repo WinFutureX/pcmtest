@@ -147,12 +147,12 @@ initjoy:
 	move.b	#0, $A1000D	; ext port
 
 main:
-	move.w	#sndsize, d0	; set repeat count
+	move.w	#(sndsize/65536), d0	; set repeat count
 	lea	snd, a0
 	lea	$A04000, a1
 	lea	$A04001, a2
-	move.w	#$100, $A11100	; get z80 bus
-	move.w	#$100, $A11200	; hold z80 reset
+	move.w	#$100, $A11100		; get z80 bus
+	move.w	#$100, $A11200		; hold z80 reset
 
 setfm:
 	move.b	#$2B, (a1)	; select dac enable register
